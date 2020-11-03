@@ -26,34 +26,91 @@ const choices = {
    spock: { name: 'Spock', defeats: ['scissors', 'rock'] },
 };
 
+let computerChoice = '';
+
 // Reset all 'selected' icons
 function resetSelected() {
    allGameIcons.forEach(icon => icon.classList.remove('selected'));
 }
 
+// Random computer choice
+function computerRandomChoice() {
+   const computerChoiceNumber = Math.random();
+   if (computerChoiceNumber < 0.2) {
+      computerChoice = 'Rock';
+   }
+   else if (computerChoiceNumber <= 0.4) {
+      computerChoice = 'Paper';
+   }
+   else if (computerChoiceNumber <= 0.6) {
+      computerChoice = 'scissors';
+   }
+   else if (computerChoiceNumber <= 0.8) {
+      computerChoice = 'Lizard';
+   }
+   else {
+      computerChoice = 'Spock';
+   }
+}
+
+// Add 'selected' styling & computerChoice
+function displayComputerChoice(e) {
+   switch (computerChoice) {
+      case 'Rock':
+         computerRock.classList.add('selected');
+         computerChoiceEl.innerText = ' --- Rock';
+         break;
+      case 'Paper':
+         computerPaper.classList.add('selected');
+         computerChoiceEl.innerText = ' --- Paper';
+         break;
+      case 'Scissors':
+         computerScissors.classList.add('selected');
+         computerChoiceEl.innerText = ' --- Scissors';
+         break;
+      case 'Lizard':
+         computerLizard.classList.add('selected');
+         computerChoiceEl.innerText = ' --- Lizard';
+         break;
+      case 'Spock':
+         computerSpock.classList.add('selected');
+         computerChoiceEl.innerText = ' --- Spock';
+         break;
+      default:
+         break;
+   }
+}
+
+// Call functions to process turn
+function checkReult() {
+   resetSelected();
+   computerRandomChoice();
+   displayComputerChoice();
+}
+
 // Passing player selection value and styling icons
 function select(e) {
-   resetSelected();
+   checkReult();
    // Add 'selected' tyling & playerChoice
    switch (e.target.title) {
       case 'Rock':
-         e.srcElement.classList.add('selected');
+         playerRock.classList.add('selected');
          playerChoiceEl.innerText = ' --- Rock';
          break;
       case 'Paper':
-         e.srcElement.classList.add('selected');
+         playerPaper.classList.add('selected');
          playerChoiceEl.innerText = ' --- Paper';
          break;
       case 'Scissors':
-         e.srcElement.classList.add('selected');
+         playerScissors.classList.add('selected');
          playerChoiceEl.innerText = ' --- Scissors';
          break;
       case 'Lizard':
-         e.srcElement.classList.add('selected');
+         playerLizard.classList.add('selected');
          playerChoiceEl.innerText = ' --- Lizard';
          break;
       case 'Spock':
-         e.srcElement.classList.add('selected');
+         playerSpock.classList.add('selected');
          playerChoiceEl.innerText = ' --- Spock';
          break;
       default:
