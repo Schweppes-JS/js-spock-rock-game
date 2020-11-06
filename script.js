@@ -17,6 +17,7 @@ const computerLizard = document.querySelector('[data-computer-Lizard]');
 const computerSpock = document.querySelector('[data-computer-spock]');
 
 const allGameIcons = document.querySelectorAll('[data-icon]');
+const reset = document.querySelector('[data-reset]');
 
 const choices = {
    rock: { name: 'Rock', defeats: ['scissors', 'lizard'] },
@@ -26,6 +27,8 @@ const choices = {
    spock: { name: 'Spock', defeats: ['scissors', 'rock'] },
 };
 
+let playerScoreNumber = 0;
+let computerScoreNumber = 0;
 let computerChoice = '';
 
 // Reset all 'selected' icons
@@ -33,46 +36,58 @@ function resetSelected() {
    allGameIcons.forEach(icon => icon.classList.remove('selected'));
 }
 
+// Reset Score & playerChoice/computerChoice
+function resetAll() {
+   playerScoreNumber = 0;
+   computerScoreNumber = 0;
+   playerScoreEl.textContent = playerScoreNumber;
+   computerScoreEl.textContent = computerScoreNumber;
+   playerChoiceEl.textContent = '';
+   computerChoiceEl.textContent = '';
+   resultText.textContent = 'Get your choice';
+   resetSelected();
+}
+
 // Random computer choice
 function computerRandomChoice() {
    const computerChoiceNumber = Math.random();
    if (computerChoiceNumber < 0.2) {
-      computerChoice = 'Rock';
+      computerChoice = 'rock';
    }
    else if (computerChoiceNumber <= 0.4) {
-      computerChoice = 'Paper';
+      computerChoice = 'paper';
    }
    else if (computerChoiceNumber <= 0.6) {
       computerChoice = 'scissors';
    }
    else if (computerChoiceNumber <= 0.8) {
-      computerChoice = 'Lizard';
+      computerChoice = 'lizard';
    }
    else {
-      computerChoice = 'Spock';
+      computerChoice = 'spock';
    }
 }
 
 // Add 'selected' styling & computerChoice
 function displayComputerChoice(e) {
    switch (computerChoice) {
-      case 'Rock':
+      case 'rock':
          computerRock.classList.add('selected');
          computerChoiceEl.innerText = ' --- Rock';
          break;
-      case 'Paper':
+      case 'paper':
          computerPaper.classList.add('selected');
          computerChoiceEl.innerText = ' --- Paper';
          break;
-      case 'Scissors':
+      case 'scissors':
          computerScissors.classList.add('selected');
          computerChoiceEl.innerText = ' --- Scissors';
          break;
-      case 'Lizard':
+      case 'lizard':
          computerLizard.classList.add('selected');
          computerChoiceEl.innerText = ' --- Lizard';
          break;
-      case 'Spock':
+      case 'spock':
          computerSpock.classList.add('selected');
          computerChoiceEl.innerText = ' --- Spock';
          break;
@@ -81,35 +96,54 @@ function displayComputerChoice(e) {
    }
 }
 
+// Check result, increase scores, update ressultText
+function updateccore(playerChoice) {
+   if (playerChoice === computerChoice) {
+      resultText.textContent = "It's a tie.";
+   } else {
+      const choice = choices[playerChoice];
+      if (choice.defeats.indexOf(computerChoice) > -1) {
+         resultText.textContent = 'You Won!';
+         playerScoreNumber++;
+         playerScoreEl.textContent = playerScoreNumber;
+      } else {
+         resultText.textContent = 'You Lost!';
+         computerScoreNumber++;
+         computerScoreEl.textContent = computerScoreNumber;
+      }
+   }
+}
+
 // Call functions to process turn
-function checkReult() {
+function checkReult(playerChoice) {
    resetSelected();
    computerRandomChoice();
    displayComputerChoice();
+   updateccore(playerChoice);
 }
 
 // Passing player selection value and styling icons
 function select(e) {
-   checkReult();
+   checkReult(e.target.title);
    // Add 'selected' tyling & playerChoice
    switch (e.target.title) {
-      case 'Rock':
+      case 'rock':
          playerRock.classList.add('selected');
          playerChoiceEl.innerText = ' --- Rock';
          break;
-      case 'Paper':
+      case 'paper':
          playerPaper.classList.add('selected');
          playerChoiceEl.innerText = ' --- Paper';
          break;
-      case 'Scissors':
+      case 'scissors':
          playerScissors.classList.add('selected');
          playerChoiceEl.innerText = ' --- Scissors';
          break;
-      case 'Lizard':
+      case 'lizard':
          playerLizard.classList.add('selected');
          playerChoiceEl.innerText = ' --- Lizard';
          break;
-      case 'Spock':
+      case 'spock':
          playerSpock.classList.add('selected');
          playerChoiceEl.innerText = ' --- Spock';
          break;
@@ -118,4 +152,8 @@ function select(e) {
    }
 }
 
+// On startup, set initial values
+resetAll();
+
+reset.addEventListener('click', resetAll);
 allGameIcons.forEach(icon => icon.addEventListener('click', select));
